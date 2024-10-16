@@ -10,10 +10,8 @@ import io.awspring.cloud.s3.PropertiesS3ObjectContentTypeResolver;
 import io.awspring.cloud.s3.S3Resource;
 import picocli.CommandLine.ArgGroup;
 import picocli.CommandLine.Option;
-import software.amazon.awssdk.auth.credentials.AnonymousCredentialsProvider;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3ClientBuilder;
@@ -45,13 +43,7 @@ public class AwsArgs {
 	}
 
 	private AwsCredentialsProvider credentialsProvider() {
-		if (credentialsArgs != null && StringUtils.hasText(credentialsArgs.getAccessKey())
-				&& StringUtils.hasText(credentialsArgs.getSecretKey())) {
-			AwsBasicCredentials credentials = AwsBasicCredentials.create(credentialsArgs.getAccessKey(),
-					credentialsArgs.getSecretKey());
-			return StaticCredentialsProvider.create(credentials);
-		}
-		return AnonymousCredentialsProvider.create();
+		return ProfileCredentialsProvider.create();
 	}
 
 	public AwsCredentialsArgs getCredentialsArgs() {
